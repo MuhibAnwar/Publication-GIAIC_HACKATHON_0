@@ -1,0 +1,141 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the classic template styles here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  
+  /* Academic textbook specific colors */
+  --textbook-accent: #1a73e8;
+  --textbook-secondary: #f8f9fa;
+  --textbook-border: #dee2e6;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  
+  /* Dark mode academic textbook colors */
+  --textbook-accent: #8ab4f8;
+  --textbook-secondary: #212529;
+  --textbook-border: #495057;
+}
+
+/* Academic textbook styling */
+.textbook-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.learning-objectives {
+  background-color: var(--textbook-secondary);
+  border-left: 4px solid var(--textbook-accent);
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.learning-objectives h3 {
+  margin-top: 0;
+  color: var(--textbook-accent);
+}
+
+.key-terms {
+  background-color: var(--textbook-secondary);
+  border: 1px solid var(--textbook-border);
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.key-terms h3 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--textbook-border);
+  padding-bottom: 0.5rem;
+}
+
+.references {
+  background-color: var(--textbook-secondary);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.references h3 {
+  margin-top: 0;
+}
+
+.exercise-box {
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(76, 175, 80, 0.05);
+}
+
+.exercise-box h3 {
+  margin-top: 0;
+  color: #2e7d32;
+}
+
+.theorem-box {
+  border: 2px solid #2196f3;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(33, 150, 243, 0.05);
+}
+
+.theorem-box h3 {
+  margin-top: 0;
+  color: #1565c0;
+}
+
+.definition-box {
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(255, 152, 0, 0.05);
+}
+
+.definition-box h3 {
+  margin-top: 0;
+  color: #ef6c00;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .learning-objectives,
+[data-theme='dark'] .key-terms,
+[data-theme='dark'] .references {
+  background-color: var(--textbook-secondary);
+}
+
+[data-theme='dark'] .exercise-box {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+[data-theme='dark'] .theorem-box {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+[data-theme='dark'] .definition-box {
+  background-color: rgba(255, 152, 0, 0.1);
+}

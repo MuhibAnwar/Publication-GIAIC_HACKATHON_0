@@ -1,0 +1,209 @@
+/* website/src/components/EquationSolver.module.css */
+.container {
+  border: 2px solid #2196f3;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(33, 150, 243, 0.05);
+  font-family: sans-serif;
+}
+
+.container h3 {
+  margin-top: 0;
+  color: #1565c0;
+  font-size: 1.1rem;
+}
+
+.equation {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: rgba(33, 150, 243, 0.1);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.equation p {
+  margin: 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.explanation {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+}
+
+.explanation p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.parameters {
+  margin: 1.5rem 0;
+}
+
+.paramInput {
+  margin-bottom: 1rem;
+}
+
+.paramInput label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #1565c0;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #90caf9;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.calculateBtn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.calculateBtn:hover {
+  background-color: #1e88e5;
+}
+
+.resetBtn {
+  background-color: #f5f5f5;
+  color: #212529;
+  border: 1px solid #e0e0e0;
+}
+
+.resetBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.result {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 4px;
+}
+
+.result h4 {
+  margin: 0 0 0.5rem 0;
+  color: #2e7d32;
+}
+
+.result p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.example {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fff8e1;
+  border: 1px solid #ffecb3;
+  border-radius: 4px;
+}
+
+.example h4 {
+  margin: 0 0 0.5rem 0;
+  color: #f57f17;
+}
+
+.example p {
+  margin: 0;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .container {
+  background-color: rgba(33, 150, 243, 0.1);
+  border-color: #64b5f6;
+}
+
+[data-theme='dark'] .container h3 {
+  color: #90caf9;
+}
+
+[data-theme='dark'] .equation {
+  background-color: rgba(33, 150, 243, 0.2);
+}
+
+[data-theme='dark'] .explanation {
+  background-color: #1a237e;
+}
+
+[data-theme='dark'] .paramInput label {
+  color: #90caf9;
+}
+
+[data-theme='dark'] .input {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+[data-theme='dark'] .input:focus {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+}
+
+[data-theme='dark'] .calculateBtn {
+  background-color: #1e88e5;
+  color: white;
+}
+
+[data-theme='dark'] .calculateBtn:hover {
+  background-color: #1976d2;
+}
+
+[data-theme='dark'] .resetBtn {
+  background-color: #4a5568;
+  color: #e2e8f0;
+  border-color: #718096;
+}
+
+[data-theme='dark'] .resetBtn:hover {
+  background-color: #2d3748;
+}
+
+[data-theme='dark'] .result {
+  background-color: #1b5e20;
+  border-color: #4caf50;
+  color: #e8f5e9;
+}
+
+[data-theme='dark'] .result h4 {
+  color: #a5d6a7;
+}
+
+[data-theme='dark'] .example {
+  background-color: #332d23;
+  border-color: #ffbc5d;
+}
+
+[data-theme='dark'] .example h4 {
+  color: #ffb74d;
+}

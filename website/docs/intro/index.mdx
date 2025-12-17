@@ -1,0 +1,107 @@
+---
+title: Introduction to Physical AI & Humanoid Robotics
+description: Overview of embodied intelligence and the connection between digital AI and physical robotics
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import KeyTerms from '@site/src/components/KeyTerms';
+import References from '@site/src/components/References';
+
+<LearningObjectives objectives={[
+  "Understand the concept of Physical AI and embodied intelligence",
+  "Recognize the challenges in bridging digital AI with physical systems",
+  "Identify the applications and societal impact of humanoid robotics",
+  "Explore the course structure and learning path"
+]} />
+
+<KeyTerms terms={[
+  {term: "Physical AI", definition: "Artificial intelligence systems that function in the real physical world and comprehend physical laws"},
+  {term: "Embodied Intelligence", definition: "Intelligence that emerges from the interaction between an agent's cognitive processes, its body, and its environment"},
+  {term: "Humanoid Robot", definition: "A robot with a human-like body structure, typically having a head, torso, arms, and legs"},
+  {term: "ROS2", definition: "Robot Operating System 2, a flexible framework for writing robot software"}
+]} />
+
+# Introduction to Physical AI & Humanoid Robotics
+
+## Welcome to Physical AI
+
+Welcome to the fascinating field of **Physical AI and Humanoid Robotics**! This textbook bridges the gap between the digital brain and the physical body, focusing on embodied intelligence that operates in physical space.
+
+<div className="definition-box">
+
+### Key Insight: The Physical AI Revolution
+Physical AI represents a significant transition from AI models confined to digital environments to intelligent systems that understand and interact with the physical world. As we advance toward more capable robotic systems, the integration of high-level AI (Large Language Models, Vision-Language-Action models) with low-level control systems (Actuators, ROS2) becomes increasingly important.
+
+</div>
+
+## The Concept of Embodied Intelligence
+
+<div className="theorem-box">
+
+### Core Principle: Embodied Intelligence
+Embodied intelligence refers to intelligence that emerges from the interaction between an agent's cognitive processes, its body, and its environment. Unlike traditional AI systems that operate purely in digital spaces, embodied systems must understand and navigate the complexities of physical laws.
+
+</div>
+
+This concept is crucial for humanoid robotics because these robots share our physical form and can be trained with abundant data from interacting in human environments. The physical embodiment introduces unique challenges and opportunities that pure digital AI systems don't face.
+
+## Course Structure and Learning Path
+
+This course is structured into **four main modules**, each building upon the previous to develop a comprehensive understanding of humanoid robotics:
+
+<div className="row">
+  <div className="col col--3">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Module 1</strong></h3>
+      <p>The Robotic Nervous System (ROS 2)</p>
+      <p>Middleware for robot control and communication</p>
+    </div>
+  </div>
+  <div className="col col--3">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Module 2</strong></h3>
+      <p>The Digital Twin (Gazebo & Unity)</p>
+      <p>Physics simulation and environment building</p>
+    </div>
+  </div>
+  <div className="col col--3">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Module 3</strong></h3>
+      <p>The AI-Robot Brain (NVIDIA Isaac™)</p>
+      <p>Advanced perception and training</p>
+    </div>
+  </div>
+  <div className="col col--3">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Module 4</strong></h3>
+      <p>Vision-Language-Action (VLA)</p>
+      <p>The convergence of LLMs and Robotics</p>
+    </div>
+  </div>
+</div>
+
+Each module contains theoretical concepts, practical exercises, and hands-on simulations to reinforce learning.
+
+## Learning Approach
+
+This textbook adopts a **project-based learning approach**. You will progressively build toward a final capstone project where you'll implement a simulated humanoid robot capable of receiving voice commands, planning paths, navigating obstacles, identifying objects, and manipulating them.
+
+<div className="exercise-box">
+
+### Capstone Project Preview
+Throughout the course, you'll work on a cohesive project that culminates in a humanoid robot system. This project will demonstrate your understanding of all components:
+
+- Voice command processing and cognitive planning
+- Path planning for bipedal locomotion
+- Object detection and manipulation
+- Multi-sensor fusion for state estimation
+
+</div>
+
+Throughout the course, we'll use industry-standard tools including **ROS 2** for robot control, **NVIDIA Isaac** for perception systems, and various simulation environments to provide a comprehensive learning experience.
+
+<References references={[
+  {id: "ref1", ieeeCitation: "[1] S. Still and D. A. Sivak, \"The thermodynamic efficiency of computations made in the presence of feedback,\" Annu. Rev. Condens. Matter Phys., vol. 7, pp. 173-193, 2016."},
+  {id: "ref2", ieeeCitation: "[2] R. Pfeifer and J. Bongard, How the Body Shapes the Way We Think: A New View of Intelligence. Cambridge, MA, USA: MIT Press, 2006."},
+  {id: "ref3", ieeeCitation: "[3] M. T. Mason, \"A brief overview of progress in manipulation: 2010-2020,\" Annu. Rev. Control Robot. Auton. Syst., vol. 4, pp. 25-41, 2021."}
+]} />

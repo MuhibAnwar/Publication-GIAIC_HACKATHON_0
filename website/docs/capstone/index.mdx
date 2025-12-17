@@ -1,0 +1,199 @@
+---
+title: Capstone Project - Autonomous Humanoid Robot
+description: Final project implementing a simulated humanoid robot with voice commands, path planning, and object manipulation
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import KeyTerms from '@site/src/components/KeyTerms';
+import References from '@site/src/components/References';
+import BipedalBalanceSimulator from '@site/src/components/BipedalBalanceSimulator';
+import SimulationDemo from '@site/src/components/SimulationDemo';
+import JupyterIntegration from '@site/src/components/JupyterIntegration';
+import RealTimeProgressUpdates from '@site/src/components/RealTimeProgressUpdates';
+
+<LearningObjectives objectives={[
+  "Implement a complete humanoid robot control system",
+  "Integrate voice command processing with action planning",
+  "Design navigation systems for obstacle avoidance",
+  "Apply computer vision for object identification and manipulation",
+  "Demonstrate full system integration in simulation"
+]} />
+
+<KeyTerms terms={[
+  {term: "Autonomous Humanoid", definition: "A humanoid robot that can operate independently with minimal human intervention"},
+  {term: "Voice-to-Action", definition: "System that converts spoken commands to robotic actions"},
+  {term: "Cognitive Planning", definition: "High-level planning that translates natural language into action sequences"},
+  {term: "SLAM", definition: "Simultaneous Localization and Mapping for environment awareness"},
+  {term: "Manipulation", definition: "Robotic control for grasping and moving objects"}
+]} />
+
+# Capstone Project: The Autonomous Humanoid
+
+## Overview
+
+The capstone project brings together all the concepts learned throughout the textbook to implement a simulated humanoid robot capable of receiving voice commands, planning paths, navigating obstacles, identifying objects using computer vision, and manipulating them. This project represents the culmination of the Physical AI journey, integrating perception, planning, and control systems.
+
+## Project Requirements
+
+### Core Functionality
+1. **Voice Command Reception**: The robot must receive and interpret voice commands using OpenAI Whisper
+2. **Path Planning**: Navigate to designated locations while avoiding obstacles  
+3. **Object Identification**: Use computer vision to recognize and locate objects in the environment
+4. **Manipulation**: Perform grasping and manipulation tasks with humanoid arms
+5. **Simulation Environment**: All functionality must be demonstrated in a simulated environment
+
+### Technical Integration
+- **ROS2 Control**: All subsystems must communicate via ROS2 topics and services
+- **NVIDIA Isaac**: Perception and navigation systems must leverage Isaac tools
+- **VLA Integration**: Vision-Language-Action models for cognitive planning
+- **Gazebo Simulation**: Physics-based simulation environment
+- **Real-time Processing**: All systems must respond within specified time limits
+
+## Implementation Architecture
+
+### 1. Voice Command Processing
+
+The system begins with a voice command processing node that uses OpenAI Whisper to transcribe spoken commands into text. This node interfaces with the cognitive planning system to convert natural language into a sequence of robotic actions.
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+from vosk import Model, KaldiRecognizer
+import json
+
+class VoiceCommandNode(Node):
+    def __init__(self):
+        super().__init__('voice_command_node')
+        self.publisher = self.create_publisher(String, 'natural_language_command', 10)
+        
+        # Initialize VOSK for offline speech recognition
+        self.model = Model(lang='en-us')
+        self.recognizer = KaldiRecognizer(self.model, 16000)
+        
+        # Audio input setup would go here
+        # For simulation, we'll simulate voice commands
+        self.get_logger().info('Voice command processing node initialized')
+
+    def process_voice_input(self, audio_data):
+        if self.recognizer.AcceptWaveform(audio_data):
+            result = json.loads(self.recognizer.Result())
+            command = String()
+            command.data = result['text']
+            self.publisher.publish(command)
+            self.get_logger().info(f'Processed command: {command.data}')
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = VoiceCommandNode()
+    
+    # In real implementation, this would continuously listen for voice commands
+    # For simulation, we'll trigger sample commands
+    sample_command = String()
+    sample_command.data = "Clean the room"
+    node.publisher.publish(sample_command)
+    
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+### 2. Cognitive Planning System
+
+The cognitive planner translates high-level commands into specific robotic actions. It integrates with LLMs to understand complex commands and break them down into primitive actions.
+
+<SimulationDemo width="100%" height="500px" />
+
+### 3. Navigation and Path Planning
+
+The navigation system combines SLAM for environment mapping with path planning algorithms to navigate obstacles and reach designated locations. This system must account for the unique kinematics of a humanoid robot.
+
+<Exercise 
+  id="capstone-nav-ex1" 
+  type="coding" 
+  question="Implement a path planning algorithm that accounts for humanoid kinematics. The algorithm should generate a sequence of waypoints that a bipedal robot can follow while avoiding obstacles and considering its step constraints." 
+  initialCode="import numpy as np
+
+class HumanoidPathPlanner:
+    def __init__(self, robot_params):
+        self.step_length = robot_params['step_length']
+        self.step_width = robot_params['step_width']
+        self.turn_radius = robot_params['turn_radius']
+        
+    def plan_path(self, start_pose, goal_pose, obstacles):
+        # TODO: Implement path planning algorithm that respects humanoid constraints
+        pass
+        
+    def smooth_path(self, waypoints):
+        # TODO: Smooth the path for natural humanoid movement
+        pass" 
+/>
+
+### 4. Computer Vision and Object Recognition
+
+The perception system uses deep learning models to identify objects in the environment, determining their position and attributes for manipulation planning.
+
+### 5. Manipulation Control
+
+The manipulation system plans and executes grasping and manipulation tasks using the humanoid's articulated hands and arms.
+
+## Performance Requirements
+
+- Voice command processing: < 1 second response time
+- Path planning: < 2 seconds for typical indoor environment
+- Object recognition: > 90% accuracy in controlled lighting
+- Navigation: Successful path following > 95% in obstacle-free paths
+- Manipulation: Successful grasp > 85% of the time
+
+## Assessment Criteria
+
+Students will be evaluated on:
+
+1. **System Integration**: How well all subsystems work together
+2. **Performance**: Meeting the specified timing and accuracy requirements
+3. **Robustness**: Handling of unexpected situations and error recovery
+4. **Documentation**: Quality of technical documentation and code comments
+
+## Implementation Timeline
+
+1. **Week 1**: Voice command processing and cognitive planning
+2. **Week 2**: Navigation and path planning systems  
+3. **Week 3**: Computer vision and object recognition
+4. **Week 4**: Manipulation control integration
+5. **Week 5**: System integration and testing
+
+## Resources
+
+This project builds on all previous modules:
+- ROS2 communication from Module 1
+- Physics simulation from Module 2  
+- Perception systems from Module 3
+- VLA integration from Module 4
+
+<BipedalBalanceSimulator width="100%" height="500px" />
+
+<JupyterIntegration 
+  notebook={{
+    id: 'capstone-controller',
+    title: 'Humanoid Controller Implementation',
+    description: 'Implementation of the main control loop for the autonomous humanoid robot',
+    code: '# Main control loop for autonomous humanoid robot\n# Students will implement the integration of all subsystems\n\nimport rclpy\nfrom rclpy.node import Node\n\n# TODO: Implement the main control node that integrates all subsystems',
+    outputs: []
+  }}
+  width="100%"
+  height="600px"
+/>
+
+<References references={[
+  {id: "cap-ref1", ieeeCitation: "[1] S. S. Srinivasa et al., \"Personal Robots: The Next Grand Challenge of Robotics Research,\" 2019 28th IEEE Int. Conf. Robot. Human Interactive Communication (RO-MAN), 2019, pp. 1-8."},
+  {id: "cap-ref2", ieeeCitation: "[2] M. Ciocarlie et al., \"On the Role of Hand Postures in Coordinated Grasp and Arm Control for Humanoid Manipulation,\" IEEE Trans. Robot., vol. 31, no. 4, pp. 835-849, 2015."},
+  {id: "cap-ref3", ieeeCitation: "[3] S. Kajita et al., \"Dynamic Walking Control of Humanoid Robot Using MPC and Virtual Slope Based on Zero Dynamics Analysis,\" 2001 IEEE/RSJ Int. Conf. Intelligent Robots and Systems, 2001, pp. 2109-2114."}
+]} />
+
+<RealTimeProgressUpdates 
+  studentId="student-id-12345" 
+  chapterId="capstone-project" 
+/>

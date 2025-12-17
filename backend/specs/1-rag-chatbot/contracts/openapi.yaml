@@ -1,0 +1,305 @@
+# OpenAPI Specification: RAG Chatbot API
+
+openapi: 3.0.1
+info:
+  title: RAG Chatbot API
+  description: API for the RAG (Retrieval-Augmented Generation) Chatbot with Text Selection Capability
+  version: 1.0.0
+servers:
+  - url: https://api.rag-chatbot.example.com/v1
+    description: Production server
+  - url: https://staging-api.rag-chatbot.example.com/v1
+    description: Staging server
+
+paths:
+  /query/general:
+    post:
+      summary: Query the chatbot about the entire book content
+      description: Submit a question about the book content and receive an answer based on the entire book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneralQueryRequest'
+      responses:
+        '200':
+          description: Successful response with answer and citations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /query/selection:
+    post:
+      summary: Query the chatbot about selected text only
+      description: Submit a question about specifically selected text passages and receive an answer based only on the selected text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectionQueryRequest'
+      responses:
+        '200':
+          description: Successful response with answer and citations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /ingest:
+    post:
+      summary: Ingest book content
+      description: Upload book content to be processed and indexed for retrieval
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IngestRequest'
+      responses:
+        '200':
+          description: Content successfully ingested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      summary: Health check
+      description: Check the health status of the service
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '500':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    GeneralQueryRequest:
+      type: object
+      required:
+        - question
+        - book_id
+      properties:
+        question:
+          type: string
+          description: The question about the book content
+          example: "What is the main theme of this book?"
+        book_id:
+          type: string
+          format: uuid
+          description: The ID of the book to query
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        session_id:
+          type: string
+          format: uuid
+          description: The session ID to maintain conversation context
+          example: "123e4567-e89b-12d3-a456-426614174001"
+
+    SelectionQueryRequest:
+      type: object
+      required:
+        - question
+        - selected_text
+        - book_id
+      properties:
+        question:
+          type: string
+          description: The question about the selected text
+          example: "Can you explain this concept in simpler terms?"
+        selected_text:
+          type: string
+          description: The text passage selected by the user
+          example: "The concept of relativity states that..."
+        book_id:
+          type: string
+          format: uuid
+          description: The ID of the book containing the selected text
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        session_id:
+          type: string
+          format: uuid
+          description: The session ID to maintain conversation context
+          example: "123e4567-e89b-12d3-a456-426614174001"
+
+    QueryResponse:
+      type: object
+      required:
+        - answer
+        - citations
+        - confidence_score
+      properties:
+        answer:
+          type: string
+          description: The answer to the user's question
+          example: "The main theme of the book is the exploration of human consciousness..."
+        citations:
+          type: array
+          description: Source citations for the answer
+          items:
+            $ref: '#/components/schemas/Citation'
+        confidence_score:
+          type: number
+          format: float
+          description: Confidence score of the answer (0-1)
+          minimum: 0
+          maximum: 1
+          example: 0.87
+        query_id:
+          type: string
+          format: uuid
+          description: ID of the generated query
+          example: "123e4567-e89b-12d3-a456-426614174002"
+
+    Citation:
+      type: object
+      required:
+        - chapter
+        - page
+        - paragraph
+      properties:
+        chapter:
+          type: string
+          description: Chapter reference
+          example: "Chapter 3"
+        page:
+          type: integer
+          description: Page number
+          example: 45
+        paragraph:
+          type: integer
+          description: Paragraph number
+          example: 2
+        text:
+          type: string
+          description: The cited text passage
+          example: "The main character realizes that..."
+
+    IngestRequest:
+      type: object
+      required:
+        - book_id
+        - title
+        - content
+      properties:
+        book_id:
+          type: string
+          format: uuid
+          description: The unique identifier for the book
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: The title of the book
+          example: "Understanding Complex Systems"
+        content:
+          type: string
+          description: The full text content of the book
+          example: "Chapter 1: Introduction to Systems..."
+
+    IngestResponse:
+      type: object
+      required:
+        - message
+        - chunks_processed
+        - status
+      properties:
+        message:
+          type: string
+          description: Status message
+          example: "Book content successfully processed"
+        chunks_processed:
+          type: integer
+          description: Number of text chunks created
+          example: 125
+        status:
+          type: string
+          description: Processing status
+          enum: [success, partial, failed]
+          example: "success"
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          description: Health status
+          enum: [healthy, degraded, unhealthy]
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the health check
+          example: "2025-12-16T10:00:00Z"
+        details:
+          type: object
+          description: Additional health details
+          additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "QUERY_FAILED"
+        message:
+          type: string
+          description: Error message
+          example: "Failed to process query due to vector database unavailability"
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true

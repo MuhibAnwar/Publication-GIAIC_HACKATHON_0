@@ -1,0 +1,200 @@
+---
+title: Module 2 Exercises - The Digital Twin (Gazebo & Unity)
+description: Exercises for physics simulation and environment building
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import Exercise from '@site/src/components/Exercise';
+
+<LearningObjectives objectives={[
+  "Implement physics simulation environments using Gazebo",
+  "Build virtual environments for humanoid robot testing",
+  "Integrate simulation with real-world robotics using ROS2",
+  "Apply domain randomization techniques"
+]} />
+
+# Module 2 Exercises: The Digital Twin (Gazebo & Unity)
+
+## Exercise 1: Basic Humanoid Robot Model in Gazebo
+
+Create a basic humanoid robot model in Gazebo with articulated joints and ROS2 integration.
+
+<Exercise
+  id="m2-ex1"
+  type="coding"
+  question="Create a URDF model of a simple humanoid robot with 2 legs, 2 arms, and a head. Include appropriate joint limits, physical properties, and ROS2 controller plugins. The robot should be able to stand in Gazebo."
+  initialCode={`<?xml version="1.0" ?>
+<robot name="simple_humanoid" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include ROS2 control plugin -->
+  <gazebo>
+    <plugin name="ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/humanoid_robot</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+  <!-- Robot base link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.3 0.15 0.4"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.3 0.15 0.4"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <!-- TODO: Add additional links and joints for:
+        - 2 legs (hip, knee, ankle joints)
+        - 2 arms (shoulder, elbow joints)
+        - Head with neck joint
+        Include all physical properties and joint limits -->
+  
+</robot>`}
+/>
+
+---
+
+## Exercise 2: Environment Creation in Gazebo
+
+Design a simulation environment suitable for humanoid robot testing.
+
+<Exercise
+  id="m2-ex2"
+  type="coding"
+  question="Create a Gazebo world file with a room environment that includes obstacles, different floor textures, and lighting conditions. Add a humanoid robot model to the environment."
+  initialCode={`<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="humanoid_test_world">
+    <!-- Include physics engine -->
+    <physics name="1ms" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Include ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Include sun -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- TODO: Add a room structure with walls -->
+    <!-- TODO: Add various obstacles for navigation testing -->
+    <!-- TODO: Add different floor textures/materials -->
+    <!-- TODO: Add lighting sources -->
+    <!-- TODO: Include your humanoid robot model from Exercise 1 -->
+
+  </world>
+</sdf>`}
+/>
+
+---
+
+## Exercise 3: ROS2 Controller Integration
+
+Integrate ROS2 controllers with the simulated humanoid robot.
+
+<Exercise
+  id="m2-ex3"
+  type="coding"
+  question="Create ROS2 controller configurations to control the humanoid robot joints in Gazebo. Implement position, velocity, and effort controllers for the robot's joints."
+  initialCode={`# controllers.yaml
+controller_manager:
+  ros__parameters:
+    update_rate: 1000  # Hz
+    use_sim_time: true
+
+    # Joint state broadcaster
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # Position controllers for legs
+    left_hip_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    right_hip_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    # TODO: Add additional controllers for other joints:
+    # - Knee controllers
+    # - Ankle controllers
+    # - Arm controllers
+    # - Head controller
+    
+# TODO: Create launch file to start the controllers with the simulation`}
+/>
+
+---
+
+## Exercise 4: Simulation-to-Reality Transfer Techniques
+
+Implement techniques to improve the transfer of learned behaviors from simulation to reality.
+
+<Exercise
+  id="m2-ex4"
+  type="coding"
+  question="Implement domain randomization techniques to improve simulation-to-reality transfer. Randomize physical parameters during training to make learned behaviors robust to environmental differences."
+  initialCode={`import random
+import rospy
+from gazebo_msgs.srv import SetPhysicsProperties, GetPhysicsProperties
+
+class DomainRandomizer:
+    def __init__(self):
+        # Connect to Gazebo services
+        rospy.wait_for_service('/gazebo/set_physics_properties')
+        rospy.wait_for_service('/gazebo/get_physics_properties')
+        
+        self.set_physics = rospy.ServiceProxy('/gazebo/set_physics_properties', SetPhysicsProperties)
+        self.get_physics = rospy.ServiceProxy('/gazebo/get_physics_properties', GetPhysicsProperties)
+    
+    def randomize_physics_parameters(self):
+        """
+        Randomize physics parameters in the simulation
+        """
+        # Get current physics properties
+        current_physics = self.get_physics()
+        
+        # TODO: Randomize parameters like:
+        # - Gravity (around 9.8 m/s^2)
+        # - Friction coefficients
+        # - ODE solver parameters
+        # - Contact dynamics parameters
+        
+        # Apply new physics properties
+        # self.set_physics(...)
+    
+    def randomize_robot_parameters(self):
+        """
+        Randomize robot-specific parameters like mass and friction
+        """
+        # TODO: Randomize link masses, friction, damping
+        # This could involve spawning different robot models
+        # or using Gazebo model modification services
+        pass`}
+/>
+
+---
+
+## Exercise 5: Unity Simulation Environment (Conceptual)
+
+Design a Unity simulation environment for humanoid robot training.
+
+<Exercise
+  id="m2-ex5"
+  type="essay"
+  question="Describe how you would design a Unity simulation environment for humanoid robot training. Include details about the physics engine, rendering pipeline, sensor simulation, and integration with ROS2. Compare the advantages and challenges of Unity versus Gazebo for humanoid robotics simulation."/>

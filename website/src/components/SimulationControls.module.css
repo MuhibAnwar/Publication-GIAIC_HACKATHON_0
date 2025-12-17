@@ -1,0 +1,142 @@
+/* website/src/components/SimulationControls.module.css */
+.container {
+  border: 1px solid var(--textbook-border);
+  border-radius: 4px;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  font-family: sans-serif;
+}
+
+.controlsRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.playBtn {
+  background-color: #28a745;
+  color: white;
+}
+
+.playBtn:hover {
+  background-color: #218838;
+}
+
+.resetBtn {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.resetBtn:hover {
+  background-color: #e0a800;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.slider {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 5px;
+  background: #d1d5db;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+  border: none;
+}
+
+.parameters {
+  margin-top: 1rem;
+}
+
+.parameters h4 {
+  margin: 0 0 0.75rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.paramRow {
+  margin-bottom: 1rem;
+}
+
+.paramRow:last-child {
+  margin-bottom: 0;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .container {
+  background-color: #212529;
+  border-color: #495057;
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .playBtn {
+  background-color: #1e7e34;
+}
+
+[data-theme='dark'] .playBtn:hover {
+  background-color: #17682d;
+}
+
+[data-theme='dark'] .resetBtn {
+  background-color: #d39e00;
+  color: #f8f9fa;
+}
+
+[data-theme='dark'] .resetBtn:hover {
+  background-color: #b88500;
+}
+
+[data-theme='dark'] .label {
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .slider {
+  background: #4b5563;
+}
+
+[data-theme='dark'] .slider::-webkit-slider-thumb {
+  background: #818cf8;
+}
+
+[data-theme='dark'] .slider::-moz-range-thumb {
+  background: #818cf8;
+}
+
+[data-theme='dark'] .parameters h4 {
+  color: #e9ecef;
+}

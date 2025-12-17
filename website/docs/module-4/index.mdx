@@ -1,0 +1,367 @@
+---
+title: Module 4 - Vision-Language-Action (VLA)
+description: The convergence of LLMs and Robotics
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import KeyTerms from '@site/src/components/KeyTerms';
+import References from '@site/src/components/References';
+
+<LearningObjectives objectives={[
+  "Understand the convergence of Large Language Models (LLMs) and robotics",
+  "Implement voice command processing using OpenAI Whisper",
+  "Design cognitive planning systems that translate natural language to ROS2 actions",
+  "Integrate voice, planning, navigation, perception, and manipulation systems",
+  "Build a complete autonomous humanoid system for the capstone project"
+]} />
+
+<KeyTerms terms={[
+  {term: "Vision-Language-Action (VLA)", definition: "A unified AI model that processes vision, language, and action in a single framework"},
+  {term: "Cognitive Planning", definition: "High-level planning that translates natural language commands to sequences of robot actions"},
+  {term: "Human-Robot Interaction", definition: "The study of how humans and robots communicate and work together"},
+  {term: "Large Language Model (LLM)", definition: "A type of AI model trained on large amounts of text for natural language understanding and generation"},
+  {term: "OpenAI Whisper", definition: "A speech recognition model developed by OpenAI for voice-to-text conversion"}
+]} />
+
+# Module 4: Vision-Language-Action (VLA)
+
+## Overview: The Convergence of LLMs and Robotics
+
+The Vision-Language-Action (VLA) paradigm represents a transformative approach in robotics, integrating perception, cognition, and action into unified systems. This module explores how Large Language Models (LLMs) can serve as cognitive planners for robots, enabling natural human-robot interaction through voice commands.
+
+<div className="definition-box">
+
+### Key Concept: Vision-Language-Action (VLA)
+VLA architectures combine visual perception, language understanding, and action generation in a single AI model. These systems can process natural language commands, perceive the environment, and execute appropriate robot behaviors in a coordinated manner.
+
+</div>
+
+The integration of LLMs with robotics transforms how we program and interact with robots. Instead of hard-coded behaviors, robots can understand high-level human instructions and autonomously break them down into executable actions.
+
+## Voice Command Processing with OpenAI Whisper
+
+### Introduction to OpenAI Whisper
+
+[OpenAI Whisper](https://openai.com/research/whisper) is a state-of-the-art automatic speech recognition (ASR) system trained on 680,000 hours of multilingual and multitask supervised data. For robotics applications, Whisper enables robots to understand spoken commands in real-time.
+
+<div className="theorem-box">
+
+### Critical Component: Speech-to-Text Pipeline
+A robust voice command processing pipeline includes:
+- Audio input capture with noise reduction
+- Real-time speech recognition using Whisper
+- Natural language processing for intent extraction
+- Error handling for misrecognition
+
+</div>
+
+### Implementing Whisper for Voice Commands
+
+To implement voice command processing in a robotic system:
+
+1. **Audio Capture**: Continuously listen for activation keywords or continuously process audio input
+2. **Speech Recognition**: Use Whisper to convert speech to text
+3. **Intent Classification**: Determine the user's intent from the recognized text
+4. **Command Parsing**: Extract specific parameters and targets from the command
+
+```python
+import whisper
+import torch
+import rospy
+from std_msgs.msg import String
+
+class VoiceCommandProcessor:
+    def __init__(self):
+        # Load Whisper model (recommended: medium or large for accuracy)
+        self.model = whisper.load_model("medium")
+        
+        # Publisher for recognized commands
+        self.command_pub = rospy.Publisher('/voice_command', String, queue_size=10)
+        
+        # Subscribe to audio input
+        self.audio_sub = rospy.Subscriber('/audio_input', AudioData, self.process_audio)
+        
+        # Activation keywords
+        self.activation_keywords = ["robot", "hey robot", "please", "start"]
+        
+    def process_audio(self, audio_data):
+        """Process audio data using Whisper"""
+        # Convert ROS audio message to format expected by Whisper
+        audio_array = self.audio_to_array(audio_data)
+        
+        # Transcribe using Whisper
+        result = self.model.transcribe(audio_array)
+        text = result["text"].strip().lower()
+        
+        # Check for activation keywords and process command
+        if any(keyword in text for keyword in self.activation_keywords):
+            command = self.extract_command(text)
+            if command:
+                self.command_pub.publish(command)
+                
+    def extract_command(self, text):
+        """Extract command from recognized text"""
+        # Remove activation keywords
+        for keyword in self.activation_keywords:
+            text = text.replace(keyword, "").strip()
+            
+        return text if text else None
+```
+
+## Cognitive Planning with LLMs
+
+### Concept of Cognitive Planning
+
+Cognitive planning bridges the gap between high-level human instructions and low-level robot actions. It involves using LLMs to:
+
+1. Parse natural language commands ("Clean the room")
+2. Break down complex tasks into subtasks
+3. Generate sequences of ROS2 service calls and actions
+4. Adapt plans based on environmental feedback
+
+<div className="exercise-box">
+
+### Exercise: Cognitive Planning System
+Design a function that takes a natural language command and generates a sequence of ROS2 service calls to achieve the desired behavior.
+
+</div>
+
+### Implementation Strategy
+
+The cognitive planning system integrates LLMs with the ROS2 framework using a structured approach:
+
+1. **Prompt Engineering**: Create effective prompts that guide the LLM to output structured action sequences
+2. **Action Space Mapping**: Define a mapping between LLM outputs and available ROS2 actions
+3. **Context Awareness**: Provide environmental context to enable informed planning
+4. **Plan Execution**: Execute the generated action sequence through ROS2 services and actions
+
+```python
+import openai
+import json
+from typing import List, Dict, Any
+
+class CognitivePlanner:
+    def __init__(self, ros2_interface):
+        self.ros2_interface = ros2_interface
+        self.client = openai.OpenAI()  # Initialize OpenAI client
+        
+    def plan_action_sequence(self, command: str, environment_context: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+        """
+        Plans a sequence of ROS2 actions based on a natural language command
+        """
+        # Prepare system prompt with available actions and environment context
+        system_prompt = self._build_system_prompt()
+        
+        # Prepare user prompt with command and context
+        user_prompt = self._build_user_prompt(command, environment_context)
+        
+        # Get plan from LLM
+        response = self.client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            functions=[
+                {
+                    "name": "generate_plan",
+                    "description": "Generate a sequence of robot actions",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "actions": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "action_type": {"type": "string", "enum": ["navigate", "detect_object", "manipulate", "grasp", "place"]},
+                                        "target": {"type": "string"},
+                                        "parameters": {"type": "object"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            function_call={"name": "generate_plan"}
+        )
+        
+        # Parse and return the action sequence
+        plan_str = response.choices[0].message.function_call.arguments
+        plan = json.loads(plan_str)
+        return plan["actions"]
+    
+    def _build_system_prompt(self) -> str:
+        return """
+        You are a cognitive planner for a humanoid robot. Your role is to interpret high-level natural language commands
+        and break them down into a sequence of specific actions the robot can execute.
+        
+        Available action types:
+        - navigate: Move robot to a specific location
+        - detect_object: Locate objects of a specific type in the environment
+        - manipulate: Generic manipulation action
+        - grasp: Pick up an object
+        - place: Place an object at a specific location
+        
+        Output your plan as a JSON object containing an array of actions with the schema:
+        {
+            "actions": [
+                {
+                    "action_type": "...",
+                    "target": "...",
+                    "parameters": {...}
+                }
+            ]
+        }
+        """
+    
+    def _build_user_prompt(self, command: str, context: Dict[str, Any] = None) -> str:
+        prompt = f"Command: {command}\n"
+        if context:
+            prompt += f"Environment context: {json.dumps(context, indent=2)}\n"
+        prompt += "Generate a plan to execute this command."
+        return prompt
+```
+
+## Integration: Building the Autonomous Humanoid
+
+### System Architecture
+
+The autonomous humanoid system integrates all components from the previous modules:
+
+<div className="row">
+  <div className="col col--6">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Voice Processing</strong></h3>
+      <p>OpenAI Whisper for speech recognition</p>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Cognitive Planning</strong></h3>
+      <p>LLM-based task decomposition</p>
+    </div>
+  </div>
+</div>
+
+<div className="row padding-top--md">
+  <div className="col col--6">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Navigation</strong></h3>
+      <p>ROS2 Nav2 with humanoid-specific constraints</p>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="text--center padding-vert--md">
+      <h3><strong>Perception & Manipulation</strong></h3>
+      <p>Computer vision and robotic manipulation</p>
+    </div>
+  </div>
+</div>
+
+### Complete System Flow
+
+1. **Voice Command Processing**: User speaks a command
+2. **Speech Recognition**: Whisper converts voice to text
+3. **Intent Classification**: Determine command type
+4. **Cognitive Planning**: LLM generates action sequence
+5. **Action Execution**: Execute actions through ROS2 interfaces
+6. **Feedback Loop**: Monitor execution and adapt as needed
+
+```python
+class AutonomousHumanoid:
+    def __init__(self):
+        # Initialize all subsystems
+        self.voice_processor = VoiceCommandProcessor()
+        self.cognitive_planner = CognitivePlanner(ros2_interface)
+        self.navigation_system = NavigationSystem()
+        self.perception_system = PerceptionSystem()
+        self.manipulation_system = ManipulationSystem()
+        
+    def execute_command(self, command: str):
+        """
+        Execute a complete command from voice input to action completion
+        """
+        # Get environmental context
+        context = self.get_environment_context()
+        
+        # Plan the action sequence
+        action_sequence = self.cognitive_planner.plan_action_sequence(command, context)
+        
+        # Execute each action in sequence
+        for action in action_sequence:
+            self.execute_single_action(action)
+    
+    def get_environment_context(self) -> Dict[str, Any]:
+        """
+        Gather environmental information for planning context
+        """
+        context = {}
+        
+        # Get map of environment
+        context["map"] = self.navigation_system.get_map()
+        
+        # Get detected objects
+        context["objects"] = self.perception_system.get_detected_objects()
+        
+        # Get robot status
+        context["robot_status"] = {
+            "position": self.navigation_system.get_position(),
+            "battery_level": self.get_battery_level(),
+            "current_task": self.get_current_task()
+        }
+        
+        return context
+    
+    def execute_single_action(self, action: Dict[str, Any]):
+        """
+        Execute a single action based on its type
+        """
+        action_type = action["action_type"]
+        target = action["target"]
+        parameters = action.get("parameters", {})
+        
+        if action_type == "navigate":
+            self.navigation_system.navigate_to(target, parameters)
+        elif action_type == "detect_object":
+            self.perception_system.detect_object(target, parameters)
+        elif action_type == "grasp":
+            self.manipulation_system.grasp_object(target, parameters)
+        elif action_type == "place":
+            self.manipulation_system.place_object(target, parameters)
+        else:
+            print(f"Unknown action type: {action_type}")
+```
+
+## Capstone Project: The Autonomous Humanoid
+
+The capstone project integrates all components learned throughout the course into a unified autonomous humanoid system. Students will implement a complete system that:
+
+1. **Receives Voice Commands**: Using OpenAI Whisper to understand natural language
+2. **Plans Actions**: Using LLMs to generate task sequences
+3. **Navigates**: With ROS2 navigation adapted for humanoid constraints
+4. **Perceives**: Identifying relevant objects in the environment
+5. **Manipulates**: Handling objects with dexterous manipulation
+
+<div className="exercise-box">
+
+### Capstone Challenge: Voice Command to Object Manipulation
+Implement a system that can process a voice command like "Please clean the room by putting the red blocks in the box" and execute the complete task.
+
+Your implementation should include:
+- Voice command processing with OpenAI Whisper
+- Cognitive planning with an LLM to generate action sequences
+- Navigation with obstacle avoidance
+- Object detection and identification
+- Robotic manipulation to grasp and place objects
+
+</div>
+
+The capstone project demonstrates the full vision of Physical AI - the seamless integration of perception, cognition, and action in a physical system that can understand and interact with the world through natural human communication.
+
+<References references={[
+  {id: "ref1", ieeeCitation: "[1] A. Radford et al., \"Robust Speech Recognition via Large-Scale Weak Supervision,\" arXiv preprint arXiv:2212.04356, 2022."},
+  {id: "ref2", ieeeCitation: "[2] D. Huang et al., \"Collaborative Vision-Language Pre-training for Robot Action Generation,\" in Proc. IEEE/RSJ Int. Conf. Intelligent Robots and Systems (IROS), 2023."},
+  {id: "ref3", ieeeCitation: "[3] M. Ahn et al., \"Do As I Can, Not As I Say: Grounding Language in Robotic Affordances,\" in Proc. Conf. Robot Learning (CoRL), 2022."}
+]} />

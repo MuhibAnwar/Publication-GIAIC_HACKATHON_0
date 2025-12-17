@@ -1,0 +1,163 @@
+---
+title: Module 1 - The Robotic Nervous System (ROS 2)
+description: Understanding ROS2 architecture, nodes, topics, and services for humanoid robot control
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import KeyTerms from '@site/src/components/KeyTerms';
+import References from '@site/src/components/References';
+import ROS2Visualizer from '@site/src/components/ROS2Visualizer';
+import EquationSolver from '@site/src/components/EquationSolver';
+
+<LearningObjectives objectives={[
+  "Understand ROS2 architecture and core concepts",
+  "Explain the differences between ROS1 and ROS2",
+  "Implement ROS2 packages with Python",
+  "Configure launch files and parameters",
+  "Connect high-level AI with low-level controls via ROS2"
+]} />
+
+<KeyTerms terms={[
+  {term: "ROS2", definition: "Robot Operating System 2, a flexible framework for writing robot software"},
+  {term: "Node", definition: "A process that performs computation in ROS"},
+  {term: "Topic", definition: "ROS messaging system for unidirectional communication"},
+  {term: "Service", definition: "ROS messaging system for bidirectional communication"},
+  {term: "Package", definition: "A modular unit of organization containing libraries, executables, etc."},
+  {term: "Launch File", definition: "An XML file that specifies which nodes to run and their parameters"}
+]} />
+
+# Module 1: The Robotic Nervous System (ROS 2)
+
+## Introduction to ROS2
+
+ROS2 (Robot Operating System 2) provides the middleware for robot control, connecting high-level AI with low-level controls. It addresses limitations in ROS1 by providing better security, real-time support, and multi-robot coordination capabilities essential for humanoid robots.
+
+Unlike ROS1's centralized architecture with a single master, ROS2 uses DDS (Data Distribution Service) for peer-to-peer communication, making it more robust and scalable. This distributed architecture is critical for humanoid robots that must operate in dynamic, human-centered environments.
+
+## ROS2 Architecture and Core Concepts
+
+### Nodes
+
+Nodes are the fundamental building blocks of a ROS2 system. Each node performs a specific function such as sensor processing, control algorithms, or user interfaces. In humanoid robots, nodes would handle perception, planning, and action execution.
+
+### Topics and Messages
+
+Topics enable asynchronous, unidirectional communication between nodes. Messages are the data structures passed through topics. For humanoid robots, topics might carry sensor data (IMU readings, camera images), control commands, or system status.
+
+### Services and Actions
+
+Services provide synchronous, bidirectional communication for request-response interactions. Actions are similar but designed for long-running tasks with feedback, perfect for humanoid robot behaviors like walking or manipulation tasks.
+
+## Bridging Python AI Agents to ROS Controllers
+
+One of the key advantages of ROS2 is its multi-language support, allowing Python AI agents to interface seamlessly with controllers in other languages. Using `rclpy`, Python nodes can subscribe to sensor topics and publish control commands.
+
+<ROS2Visualizer nodeId="ai-bridge-node" topicName="/joint_commands" />
+
+## Understanding URDF for Humanoids
+
+URDF (Unified Robot Description Format) is XML-based and describes robot kinematics, dynamics, and visual properties. For humanoid robots, URDF must accurately model the complex multi-degree-of-freedom joints and linkages.
+
+The humanoid form presents unique challenges in URDF:
+
+- Multiple closed kinematic chains (when feet are on the ground)
+- Complex joint limits for human-like motion
+- Proper center of mass distributions for stable walking
+
+## Example: Basic ROS2 Node in Python
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+from sensor_msgs.msg import JointState
+
+class HumanoidController(Node):
+    def __init__(self):
+        super().__init__('humanoid_controller')
+        
+        # Subscribe to joint states
+        self.subscription = self.create_subscription(
+            JointState,
+            'joint_states',
+            self.listener_callback,
+            10)
+        
+        # Publish joint commands
+        self.publisher = self.create_publisher(
+            JointState,
+            'joint_commands',
+            10)
+        
+        # Timer for control loop
+        self.timer = self.create_timer(0.05, self.control_loop)
+        
+    def listener_callback(self, msg):
+        # Process joint state data
+        self.get_logger().info(f'Received joint states: {len(msg.position)} joints')
+        
+    def control_loop(self):
+        # Compute control commands
+        cmd = JointState()
+        cmd.position = [0.0] * 28  # Example: 28 DOF humanoid
+        self.publisher.publish(cmd)
+
+def main(args=None):
+    rclpy.init(args=args)
+    controller = HumanoidController()
+    rclpy.spin(controller)
+    controller.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+## Interactive Physics: Inverse Pendulum for Balance
+
+For bipedal humanoid robots, balance can be modeled as an inverted pendulum. The equation below describes the relationship between the control torque, moment of inertia, and angular acceleration.
+
+<EquationSolver 
+  equation="\\(\\tau = I \\alpha\\) (Torque = Moment of Inertia × Angular Acceleration)" 
+  explanation="This equation is fundamental to understanding balance control in bipedal robots. The control torque (τ) needed to maintain balance depends on the moment of inertia (I) of the robot and the angular acceleration (α) required to correct the balance." 
+/>
+
+## Launch Files and Parameter Management
+
+Launch files in ROS2 are XML files that specify which nodes to run, their parameters, and other configuration. For a humanoid robot system, launch files might start perception nodes, control nodes, and the robot state publisher.
+
+```xml
+<launch>
+  <!-- Robot State Publisher -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher">
+    <param name="robot_description" value="$(find-pkg-share my_robot_description)/urdf/robot.urdf"/>
+  </node>
+  
+  <!-- Joint State Publisher -->
+  <node pkg="joint_state_publisher" exec="joint_state_publisher" name="joint_state_publisher"/>
+  
+  <!-- Perception Nodes -->
+  <node pkg="my_perception_pkg" exec="lidar_processing" name="lidar_node"/>
+  
+  <!-- Control Nodes -->
+  <node pkg="my_control_pkg" exec="balance_controller" name="balance_controller"/>
+</launch>
+```
+
+## Key Differences from ROS1
+
+1. **DDS Middleware**: ROS2 uses DDS (Data Distribution Service) instead of a centralized master, improving robustness and scalability.
+2. **Security**: First-class security features for safe robot operation in human environments.
+3. **Real-time Support**: Better real-time performance crucial for control systems.
+4. **Multi-robot Systems**: Improved capabilities for coordinating multiple robots.
+5. **API Improvements**: More consistent and robust APIs across languages.
+
+## Summary
+
+ROS2 provides the essential middleware for humanoid robotics, connecting high-level AI agents with low-level control systems. Its distributed architecture, security features, and multi-language support make it ideal for robots operating in human-centered environments. Understanding ROS2 fundamentals is essential for implementing the full Physical AI pipeline from perception to action.
+
+<References references={[
+  {id: "ref1", ieeeCitation: "[1] M. Quigley, K. Conley, B. P. Gerkey, J. Faust, T. Foote, J. Leibs, R. Wheeler, and A. Y. Ng, \"ROS: an open-source Robot Operating System,\" in Proc. Int. Conf. Robotics and Automation (ICRA), 2009."},
+  {id: "ref2", ieeeCitation: "[2] A. Soragna, A. Bigiani, A. P. Settimi, L. Fontanelli, G. L. Casalino, E. Simetti, S. Tassano, and D. Magrini, \"A survey on ROS2 as next generation robotics framework,\" 2021 IEEE Intl. Conf. Robotics and Automation (ICRA), 2021, pp. 8113-8120."},
+  {id: "ref3", ieeeCitation: "[3] S. H. Tomic, D. D. Trivunovic, Z. M. Jovanovic, D. D. Kostic, and B. T. Tomic, \"Humanoid robot control architecture based on ROS framework,\" 2015 23rd Telecommunications Forum (TELFOR), 2015, pp. 659-662."}
+]} />

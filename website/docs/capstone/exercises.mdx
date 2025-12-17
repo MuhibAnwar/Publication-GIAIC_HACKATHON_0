@@ -1,0 +1,237 @@
+---
+title: Capstone Project Exercises
+description: Exercises for the capstone project in Physical AI & Humanoid Robotics
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import Exercise from '@site/src/components/Exercise';
+
+<LearningObjectives objectives={[
+  "Implement a complete humanoid robot system",
+  "Integrate multiple AI and robotics subsystems",
+  "Design robust navigation and manipulation systems",
+  "Validate system performance in simulation"
+]} />
+
+# Capstone Project Exercises
+
+## Exercise 1: System Architecture Design
+
+Design the complete software architecture for the autonomous humanoid robot. Specify all nodes, topics, services, and their relationships.
+
+<Exercise
+  id="cap-ex1"
+  type="coding"
+  question="Create a ROS2 launch file that starts all necessary nodes for the humanoid robot system: voice processing, cognitive planner, navigation, perception, and manipulation nodes."
+  initialCode={`<launch>
+  <!-- Add all necessary nodes for the complete humanoid robot system -->
+  <!-- Include nodes for voice processing, cognitive planning, navigation, perception, and manipulation -->
+
+  <!-- Example: Voice command processor -->
+  <node pkg="voice_control" exec="voice_processor" name="voice_node">
+    <!-- Parameters for audio input, language model, etc. -->
+  </node>
+
+  <!-- Add remaining nodes with appropriate parameters -->
+
+</launch>`}
+/>
+
+---
+
+## Exercise 2: Cognitive Planning Algorithm
+
+Implement the cognitive planning system that translates natural language commands into action sequences.
+
+<Exercise 
+  id="cap-ex2" 
+  type="coding" 
+  question="Implement a function that takes a natural language command and generates a sequence of ROS2 service calls to achieve the desired behavior." 
+  initialCode="import json
+
+def cognitive_planner(natural_language_cmd: str) -> list:
+    '''
+    Takes a natural language command and returns a sequence of ROS2 service calls
+    Example: 'Move the red block to the table' -> [
+        {'service': '/detect_object', 'request': {'target': 'red block'}},
+        {'service': '/navigate_to', 'request': {...}},
+        {'service': '/grasp_object', 'request': {...}},
+        ...
+    ]
+    '''
+    # TODO: Implement the cognitive planner
+    # This could involve calling an LLM API or implementing a rule-based system
+    # Return a sequence of actions to accomplish the command
+    
+    action_sequence = []
+    
+    # Process the natural language command
+    # Break it down into subtasks
+    # Convert subtasks to ROS2 service calls
+    
+    return action_sequence" 
+/>
+
+---
+
+## Exercise 3: Path Planning with Humanoid Constraints
+
+Implement a path planning algorithm that considers the specific kinematic constraints of a humanoid robot.
+
+<Exercise 
+  id="cap-ex3" 
+  type="coding" 
+  question="Create a path planning algorithm that accounts for humanoid-specific constraints like step length, balance, and bipedal locomotion requirements." 
+  initialCode="import numpy as np
+from abc import ABC, abstractmethod
+
+class HumanoidPathPlanner:
+    def __init__(self, robot_params):
+        '''
+        robot_params: dict with humanoid-specific parameters
+        - step_length: max distance between consecutive footsteps
+        - step_width: max lateral distance between footsteps  
+        - turn_radius: minimum turning radius
+        - com_height: center of mass height (affects stability)
+        '''
+        self.step_length = robot_params.get('step_length', 0.3)
+        self.step_width = robot_params.get('step_width', 0.2)
+        self.turn_radius = robot_params.get('turn_radius', 0.5)
+        self.com_height = robot_params.get('com_height', 0.8)
+        
+    def plan_path(self, start_pose, goal_pose, obstacles):
+        '''
+        Plan a path from start_pose to goal_pose avoiding obstacles
+        Path should respect humanoid kinematic constraints
+        Returns: list of poses representing footsteps
+        '''
+        # TODO: Implement path planning respecting humanoid constraints
+        # Consider: step length limits, balance constraints, turning radius
+        footsteps = []
+        return footsteps
+        
+    def generate_footsteps(self, path_waypoints):
+        '''
+        Convert smooth path to sequence of footstep poses
+        Each footstep should be within humanoid constraints
+        '''
+        # TODO: Implement conversion from path to footsteps
+        footstep_poses = []
+        return footstep_poses" 
+/>
+
+---
+
+## Exercise 4: Multi-sensor Fusion for Localization
+
+Implement a sensor fusion system that combines IMU, joint encoders, and vision data for accurate state estimation.
+
+<Exercise 
+  id="cap-ex4" 
+  type="coding" 
+  question="Implement a Kalman filter that fuses data from multiple sensors (IMU, joint encoders, visual odometry) to estimate the humanoid robot's pose." 
+  initialCode="import numpy as np
+
+class HumanoidStateEstimator:
+    def __init__(self):
+        # Initialize state vector [x, y, z, roll, pitch, yaw, vx, vy, vz, wx, wy, wz]
+        self.state_dim = 12
+        self.state = np.zeros(self.state_dim)
+        
+        # Initialize covariance matrix
+        self.P = np.eye(self.state_dim) * 0.1
+        
+        # Process noise covariance
+        self.Q = np.eye(self.state_dim) * 0.01
+        
+        # Measurement noise covariances for different sensors
+        self.R_imu = np.eye(6) * 0.05  # [angular_rates, linear_accel]
+        self.R_encoders = np.eye(3) * 0.1  # [position_odom]
+        self.R_vision = np.eye(6) * 0.02  # [position, orientation]
+        
+    def predict(self, dt, control_input=None):
+        '''Predict state forward using motion model'''
+        # TODO: Implement prediction step
+        # Use humanoid-specific motion model
+        pass
+        
+    def update_imu(self, imu_measurement):
+        '''Update state with IMU measurement'''
+        # TODO: Implement IMU update
+        pass
+    
+    def update_encoders(self, encoder_measurement):
+        '''Update state with encoder measurement'''  
+        # TODO: Implement encoder update
+        pass
+        
+    def update_vision(self, vision_measurement):
+        '''Update state with vision measurement'''
+        # TODO: Implement vision update
+        pass
+" 
+/>
+
+---
+
+## Exercise 5: Integrated System Testing
+
+Develop a comprehensive test plan for the complete humanoid robot system.
+
+<Exercise 
+  id="cap-ex5" 
+  type="essay" 
+  question="Design a comprehensive test plan for the integrated humanoid robot system. Include unit tests for each component, integration tests for subsystems, and system-level tests. Address both nominal operation and failure scenarios." 
+/>
+
+---
+
+## Exercise 6: Performance Optimization
+
+Optimize the system for real-time performance constraints.
+
+<Exercise 
+  id="cap-ex6" 
+  type="coding" 
+  question="Profile the integrated humanoid system and implement optimizations to meet real-time constraints. Focus on perception and planning pipelines." 
+  initialCode="# Performance profiling and optimization for humanoid system
+
+import cProfile
+import pstats
+from pstats import SortKey
+import numpy as np
+
+def profile_system_performance():
+    '''Profile the entire humanoid system to identify bottlenecks'''
+    profiler = cProfile.Profile()
+    profiler.enable()
+    
+    # Run the integrated system for a period
+    # TODO: Implement system run that exercises all components
+    
+    profiler.disable()
+    
+    stats = pstats.Stats(profiler)
+    stats.sort_stats(SortKey.TIME)
+    stats.print_stats(10)  # Print top 10 time-consuming functions
+    
+    return stats
+
+def optimize_perception_pipeline():
+    '''Optimize the perception pipeline for real-time performance'''
+    # TODO: Implement optimizations like:
+    # - Efficient data structures
+    # - Multithreading where possible
+    # - GPU acceleration for neural networks
+    # - Reduced resolution for faster processing
+    pass
+
+def optimize_planning_pipeline():
+    '''Optimize the planning pipeline for real-time performance'''
+    # TODO: Implement optimizations like:
+    # - Hierarchical planning
+    # - Sampling-based planners
+    # - Cache computed paths
+    # - Parallel computation
+    pass" 
+/>

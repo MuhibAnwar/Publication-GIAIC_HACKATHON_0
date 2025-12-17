@@ -1,0 +1,265 @@
+---
+title: Module 3 - Sensor Systems Programming Exercises
+description: Programming exercises for sensor integration in humanoid robotics
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import Exercise from '@site/src/components/Exercise';
+
+<LearningObjectives objectives={[
+  "Implement sensor data processing in ROS2",
+  "Design Kalman filters for sensor fusion",
+  "Integrate multiple sensor modalities",
+  "Detect and handle sensor faults",
+  "Implement multi-sensor calibration routines"
+]} />
+
+# Module 3 Programming Exercises: Sensor Systems
+
+## Exercise 1: Basic IMU Data Processing
+
+**Problem Statement:** Implement a ROS2 node that reads IMU data and calculates the orientation (roll, pitch, yaw) from the accelerometer and gyroscope readings.
+
+**Learning Objectives:**
+- Understand IMU data formats in ROS2
+- Implement basic orientation calculations
+- Handle sensor data streams
+
+**Specifications:**
+- Subscribe to `/imu/data` topic with `sensor_msgs/Imu` message type
+- Calculate roll and pitch from accelerometer data
+- Implement simple gyroscope integration for yaw
+- Publish orientation as quaternion
+
+**Test Cases:**
+- When IMU is level: roll and pitch should be ~0
+- When IMU is tilted: appropriate changes in roll/pitch
+- Consistent quaternion representation
+
+**Hints:**
+- Use `tf.transformations` for quaternion operations
+- Apply low-pass filtering to reduce noise
+
+**Solution Template:**
+
+<Exercise 
+  id="ex1" 
+  type="coding" 
+  question="Implement a ROS2 node that subscribes to IMU data and calculates orientation." 
+  initialCode="import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Imu
+from geometry_msgs.msg import Vector3
+import math
+
+class ImuOrientationNode(Node):
+    def __init__(self):
+        super().__init__('imu_orientation_node')
+        # TODO: Create subscriber for IMU data
+        # TODO: Create publisher for orientation
+        
+    def imu_callback(self, msg):
+        # TODO: Calculate roll, pitch from accelerometer
+        # TODO: Integrate gyroscope for yaw
+        # TODO: Publish orientation
+        
+def main(args=None):
+    rclpy.init(args=args)
+    node = ImuOrientationNode()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()" 
+/>
+
+---
+
+## Exercise 2: Sensor Fusion with Kalman Filter
+
+**Problem Statement:** Implement a Kalman filter to fuse IMU and joint encoder data for improved state estimation.
+
+**Learning Objectives:**
+- Implement Kalman filter algorithm
+- Fuse different sensor modalities
+- Understand uncertainty in sensor fusion
+
+**Specifications:**
+- Use IMU for acceleration and orientation
+- Use joint encoders for position estimates
+- Implement prediction and update steps
+- Publish fused state estimates
+
+**Test Cases:**
+- When IMU is unreliable: higher weight on encoder data
+- When encoder is unreliable: higher weight on IMU data
+- Consistent state estimates
+
+**Hints:**
+- Design appropriate process and measurement models
+- Tune covariance matrices based on sensor characteristics
+
+**Solution Template:**
+
+<Exercise 
+  id="ex2" 
+  type="coding" 
+  question="Implement a Kalman filter to fuse IMU and joint encoder data for whole-body state estimation." 
+  initialCode="import rclpy
+from rclpy.node import Node
+import numpy as np
+
+class KalmanFilterNode(Node):
+    def __init__(self):
+        super().__init__('kalman_filter_node')
+        # TODO: Initialize Kalman filter parameters
+        # TODO: Create subscribers for IMU and encoder data
+        # TODO: Create publisher for fused state
+        
+    def predict_step(self):
+        # TODO: Implement prediction step
+        pass
+        
+    def update_step(self, measurement):
+        # TODO: Implement update step
+        pass
+        
+    def imu_callback(self, msg):
+        # TODO: Handle IMU measurement
+        pass
+        
+    def encoder_callback(self, msg):
+        # TODO: Handle encoder measurement
+        pass
+        
+def main(args=None):
+    rclpy.init(args=args)
+    node = KalmanFilterNode()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()" 
+/>
+
+---
+
+## Exercise 3: Sensor Fault Detection
+
+**Problem Statement:** Implement a system that detects when sensors are providing faulty data.
+
+**Learning Objectives:**
+- Implement sensor health monitoring
+- Detect outliers and anomalies
+- Design fault-tolerant systems
+
+**Specifications:**
+- Monitor sensor data streams for anomalies
+- Implement statistical tests for outlier detection
+- Log sensor health status
+- Implement sensor switching in case of failure
+
+**Test Cases:**
+- When sensor data is normal: status is healthy
+- When sensor data has outliers: fault detected
+- When sensor fails: switch to backup sensor
+
+**Hints:**
+- Use statistical measures like z-score or IQR
+- Implement time-based consistency checks
+
+**Solution Template:**
+
+<Exercise 
+  id="ex3" 
+  type="coding" 
+  question="Implement a sensor fault detection system for humanoid robot sensors." 
+  initialCode="import rclpy
+from rclpy.node import Node
+import numpy as np
+from collections import deque
+
+class SensorFaultDetectionNode(Node):
+    def __init__(self):
+        super().__init__('sensor_fault_detection_node')
+        # TODO: Initialize buffers for sensor data
+        # TODO: Set up subscribers for sensor data
+        # TODO: Create publisher for health status
+        self.data_buffer = deque(maxlen=100)  # Store last 100 readings
+        
+    def sensor_callback(self, msg):
+        # TODO: Add new reading to buffer
+        # TODO: Check for statistical anomalies
+        # TODO: Publish health status
+        pass
+        
+    def detect_fault(self, data):
+        # TODO: Implement fault detection logic
+        # Consider z-score, IQR, or other statistical methods
+        pass
+        
+def main(args=None):
+    rclpy.init(args=args)
+    node = SensorFaultDetectionNode()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()" 
+/>
+
+---
+
+## Exercise 4: Whole-Body State Estimation
+
+**Problem Statement:** Create a node that combines multiple sensor sources to estimate the robot's full state (position, orientation, velocity, etc.).
+
+**Learning Objectives:**
+- Integrate multiple sensor modalities
+- Estimate full body state
+- Handle sensor timing and coordination
+
+**Specifications:**
+- Subscribe to IMU, encoders, and other sensors
+- Maintain consistent state estimate
+- Handle sensor timing differences
+- Publish complete robot state
+
+**Test Cases:**
+- Consistent state estimates across sensors
+- Proper handling of sensor delays
+- Accurate position and orientation
+
+**Hints:**
+- Use ROS2 tf2 for coordinate transformations
+- Implement message filters for synchronization
+
+**Solution Template:**
+
+<Exercise 
+  id="ex4" 
+  type="coding" 
+  question="Implement a complete whole-body state estimation system for a humanoid robot." 
+  initialCode="import rclpy
+from rclpy.node import Node
+import numpy as np
+from tf2_ros import TransformBroadcaster
+
+class WholeBodyStateEstimator(Node):
+    def __init__(self):
+        super().__init__('whole_body_state_estimator')
+        # TODO: Initialize state variables
+        # TODO: Set up subscribers for all sensor sources
+        # TODO: Initialize tf broadcaster
+        # TODO: Create publisher for complete robot state
+        
+    def update_state(self):
+        # TODO: Integrate all sensor data to update state
+        pass
+        
+    def publish_state(self):
+        # TODO: Publish complete robot state
+        # TODO: Publish transforms for robot parts
+        pass
+        
+def main(args=None):
+    rclpy.init(args=args)
+    node = WholeBodyStateEstimator()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()" 
+/>

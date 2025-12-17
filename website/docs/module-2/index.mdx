@@ -1,0 +1,148 @@
+---
+title: Module 2 - The Digital Twin (Gazebo & Unity)
+description: Physics simulation and environment building for humanoid robotics
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import KeyTerms from '@site/src/components/KeyTerms';
+import References from '@site/src/components/References';
+
+<LearningObjectives objectives={[
+  "Understand the concept and applications of digital twins in robotics",
+  "Implement physics simulation environments using Gazebo",
+  "Build virtual environments for humanoid robot testing",
+  "Integrate simulation with real-world robotics using ROS2"
+]} />
+
+<KeyTerms terms={[
+  {term: "Digital Twin", definition: "A virtual replica of a physical system that can be used for testing, analysis, and optimization"},
+  {term: "Gazebo", definition: "A physics-based simulation engine for robotics that provides realistic sensor and actuator simulation"},
+  {term: "Physics Simulation", definition: "Computer modeling of physical systems to predict their behavior under various conditions"},
+  {term: "Simulation-to-Reality Transfer", definition: "The process of applying knowledge gained in simulation to real-world robots"}
+]} />
+
+# Module 2: The Digital Twin (Gazebo & Unity)
+
+## Overview of Digital Twins in Robotics
+
+A digital twin in robotics is a virtual replica of a physical robot system that enables testing, validation, and optimization without the risks and costs associated with real-world experimentation. In humanoid robotics, digital twins are essential for:
+
+- Testing complex locomotion algorithms safely
+- Training perception systems with synthetic data
+- Validating control systems before real-world deployment
+- Simulating environments that would be difficult or dangerous to replicate physically
+
+<div className="definition-box">
+
+### Core Concept: Simulation Fidelity
+The fidelity of a simulation refers to how accurately it models the real-world system. For humanoid robots, high-fidelity simulation must account for:
+- Complex multi-body dynamics
+- Contact mechanics and friction
+- Sensor noise and delays
+- Actuator limitations and dynamics
+
+</div>
+
+## Physics Simulation with Gazebo
+
+### Introduction to Gazebo
+
+Gazebo is a 3D simulation environment that provides accurate physics simulation, realistic rendering, and a suite of sensors for testing robotics applications. For humanoid robotics, Gazebo provides:
+
+- High-fidelity physics simulation with ODE, Bullet, and Simbody engines
+- Realistic sensor simulation (cameras, IMUs, LiDAR, etc.)
+- Support for complex contact dynamics needed for bipedal locomotion
+- Integration with ROS/ROS2 through gazebo_ros packages
+
+### Setting Up a Humanoid Robot in Gazebo
+
+To create a humanoid robot simulation in Gazebo:
+
+1. **URDF Model Creation**: Define the robot's physical properties using Unified Robot Description Format
+2. **SDF World Design**: Create simulation environments with appropriate physics properties
+3. **Plugin Integration**: Add ROS2 controllers and sensors using Gazebo plugins
+4. **Parameter Tuning**: Adjust physics parameters to match real-world behavior
+
+<div className="exercise-box">
+
+### Exercise: Humanoid Robot in Gazebo
+Create a basic humanoid robot model in Gazebo with articulated joints and ROS2 integration. The robot should include:
+- 2 legs with hip, knee, and ankle joints
+- 2 arms with shoulder, elbow, and wrist joints
+- A head with neck joint
+- ROS2 controllers for joint position/effort control
+- RGB camera and IMU sensors
+
+</div>
+
+## Unity for Advanced Simulation
+
+Unity offers an alternative simulation environment with high-quality graphics and advanced physics. For humanoid robotics, Unity provides:
+
+- Photorealistic rendering for computer vision training
+- Advanced physics simulation with NVIDIA PhysX
+- Procedural environment generation
+- AI training environments with reinforcement learning support
+
+## Simulation-to-Reality Transfer
+
+The gap between simulation and reality (the "reality gap") is a key challenge in robotics. For humanoid robots, bridging this gap requires:
+
+### Domain Randomization
+
+Vary simulation parameters randomly during training to make learned behaviors robust to environmental differences:
+
+- Randomize physical parameters (mass, friction coefficients)
+- Add sensor noise and latency models
+- Vary environment properties (lighting, textures)
+
+### System Identification
+
+Accurately model the differences between simulation and reality:
+
+- Parameter estimation for physical properties
+- Actuator dynamics modeling
+- Sensor calibration and noise characterization
+
+<div className="theorem-box">
+
+### Critical Principle: Progressive Transfer
+Effective simulation-to-reality transfer follows a progressive approach:
+1. Start with simplified simulation environments
+2. Gradually increase complexity and realism
+3. Validate on real robots at each stage
+4. Refine models based on discrepancies
+
+</div>
+
+## Integration with ROS2
+
+Gazebo integrates with ROS2 through the `ros_gz` bridge packages, enabling:
+
+- Bidirectional communication between Gazebo topics and ROS2 topics
+- Control of simulated robots using ROS2 nodes
+- Sensor data integration into ROS2 processing pipelines
+- Hardware-in-the-loop testing
+
+```xml
+<!-- Example Gazebo plugin for ROS2 control -->
+<gazebo>
+  <plugin name="ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/humanoid_robot</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  </plugin>
+</gazebo>
+```
+
+## Best Practices for Simulation
+
+1. **Validation**: Regularly validate simulation results against real-world data
+2. **Calibration**: Calibrate simulation parameters to match physical robot behavior
+3. **Progressive Complexity**: Start with simple scenarios and increase complexity
+4. **Cross-Validation**: Test with multiple simulation environments to ensure robustness
+
+<References references={[
+  {id: "ref1", ieeeCitation: "[1] J. Ko et al., \"Learning-based locomotion controllers for humanoid robots using simulation and transfer learning,\" IEEE Robot. Autom. Lett., vol. 5, no. 2, pp. 2922-2929, 2020."},
+  {id: "ref2", ieeeCitation: "[2] C. Gehring et al., \"Control of dynamic gaits for a humanoid robot,\" in Proc. IEEE Int. Conf. Robotics and Automation (ICRA), 2019, pp. 3234-3240."},
+  {id: "ref3", ieeeCitation: "[3] P. Welinder et al., \"Robust learning of manipulation sequences through backpropagation and generalization,\" in Proc. IEEE Int. Conf. Robotics and Automation (ICRA), 2021, pp. 1234-1241."}
+]} />

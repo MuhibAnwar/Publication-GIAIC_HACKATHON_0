@@ -1,0 +1,44 @@
+/* website/src/components/KeyTerms.module.css */
+.termsContainer {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid var(--textbook-border);
+  border-radius: 4px;
+  background-color: var(--textbook-secondary);
+}
+
+.termsContainer h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--textbook-border);
+  color: #2563eb;
+  font-size: 1.1rem;
+}
+
+.termsContainer dl {
+  margin: 0;
+}
+
+.termItem {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--textbook-border);
+}
+
+.termItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.term {
+  font-weight: bold;
+  margin: 0 0 0.25rem 0;
+  color: #1d4ed8;
+}
+
+.definition {
+  margin: 0;
+  line-height: 1.5;
+}

@@ -1,0 +1,182 @@
+---
+title: Module 4 Exercises - Vision-Language-Action (VLA)
+description: Exercises for Vision-Language-Action and cognitive planning
+---
+
+import LearningObjectives from '@site/src/components/LearningObjectives';
+import Exercise from '@site/src/components/Exercise';
+
+<LearningObjectives objectives={[
+  "Implement voice command processing with OpenAI Whisper",
+  "Create cognitive planning systems using LLMs",
+  "Integrate voice, planning, navigation, perception, and manipulation",
+  "Build complete autonomous humanoid functionality"
+]} />
+
+# Module 4 Exercises: Vision-Language-Action (VLA)
+
+## Exercise 1: Voice Command Processing
+
+Implement a voice command processing system using OpenAI Whisper that can recognize and parse simple commands.
+
+<Exercise
+  id="m4-ex1"
+  type="coding"
+  question="Create a Python class that uses OpenAI Whisper to process audio input and extract commands from natural language. The system should include noise reduction, activation keyword detection, and command parsing."
+  initialCode={`import whisper
+import torch
+import rospy
+from std_msgs.msg import String
+
+class VoiceCommandProcessor:
+    def __init__(self):
+        # TODO: Initialize Whisper model
+        # TODO: Set up ROS publishers/subscribers
+        # TODO: Define activation keywords
+        pass
+        
+    def process_audio(self, audio_data):
+        """Process audio data using Whisper"""
+        # TODO: Convert audio to format expected by Whisper
+        # TODO: Transcribe speech to text
+        # TODO: Check for activation keywords
+        # TODO: Extract and publish command
+        pass
+        
+    def extract_command(self, text):
+        """Extract command from recognized text"""
+        # TODO: Remove activation keywords
+        # TODO: Return clean command
+        pass`}
+/>
+
+---
+
+## Exercise 2: Cognitive Planning with LLMs
+
+Implement a cognitive planning system that translates natural language commands into ROS2 action sequences using an LLM.
+
+<Exercise
+  id="m4-ex2"
+  type="coding"
+  question="Create a function that takes a natural language command and generates a sequence of ROS2 service calls to achieve the desired behavior. Use OpenAI API to generate structured action sequences."
+  initialCode={`import openai
+import json
+from typing import List, Dict, Any
+
+class CognitivePlanner:
+    def __init__(self, ros2_interface):
+        self.ros2_interface = ros2_interface
+        # TODO: Initialize OpenAI client
+        pass
+        
+    def plan_action_sequence(self, command: str, environment_context: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+        """
+        Plans a sequence of ROS2 actions based on a natural language command
+        """
+        # TODO: Prepare system prompt with available actions
+        # TODO: Prepare user prompt with command and context
+        # TODO: Get plan from LLM using function calling
+        # TODO: Parse and return the action sequence
+        pass
+    
+    def _build_system_prompt(self) -> str:
+        # TODO: Create system prompt that describes the available actions
+        return ""
+    
+    def _build_user_prompt(self, command: str, context: Dict[str, Any] = None) -> str:
+        # TODO: Create user prompt with command and context
+        return ""`}
+/>
+
+---
+
+## Exercise 3: Integration of VLA Components
+
+Integrate all components of the Vision-Language-Action system into a cohesive autonomous humanoid controller.
+
+<Exercise
+  id="m4-ex3"
+  type="coding"
+  question="Create a main controller class that integrates voice processing, cognitive planning, navigation, perception, and manipulation systems into a unified autonomous humanoid system."
+  initialCode={`class AutonomousHumanoid:
+    def __init__(self):
+        # TODO: Initialize all subsystems:
+        # - VoiceCommandProcessor
+        # - CognitivePlanner
+        # - NavigationSystem
+        # - PerceptionSystem
+        # - ManipulationSystem
+        pass
+        
+    def execute_command(self, command: str):
+        """
+        Execute a complete command from voice input to action completion
+        """
+        # TODO: Get environmental context
+        # TODO: Plan the action sequence using cognitive planner
+        # TODO: Execute each action in sequence
+        pass
+    
+    def get_environment_context(self) -> Dict[str, Any]:
+        """
+        Gather environmental information for planning context
+        """
+        # TODO: Collect map, detected objects, robot status
+        context = {}
+        return context
+    
+    def execute_single_action(self, action: Dict[str, Any]):
+        """
+        Execute a single action based on its type
+        """
+        # TODO: Handle different action types (navigate, detect_object, grasp, place)
+        pass`}
+/>
+
+---
+
+## Exercise 4: Capstone Challenge - Autonomous Room Cleaning
+
+Implement the full capstone project where a humanoid robot receives a voice command to clean a room by identifying objects and placing them in appropriate locations.
+
+<Exercise
+  id="m4-ex4"
+  type="coding"
+  question="Create a complete system that can process a command like 'Please clean the room by putting the red blocks in the box' and execute the complete task. This should integrate all components learned in the course."
+  initialCode={`class CapstoneAutonomousHumanoid(AutonomousHumanoid):
+    def __init__(self):
+        super().__init__()
+        # Additional initialization for capstone project
+        # TODO: Add any additional components needed
+        pass
+    
+    def process_cleaning_command(self, command: str):
+        """
+        Specialized method to handle room cleaning commands
+        """
+        # TODO: Parse the cleaning command
+        # TODO: Identify objects that need to be moved
+        # TODO: Plan a sequence of actions to clean the room
+        # TODO: Execute the plan
+        pass
+    
+    def identify_cleaning_targets(self, command: str):
+        """
+        Identify objects that need to be cleaned based on the command
+        """
+        # TODO: Extract object types and destination locations from command
+        # TODO: Use perception system to locate target objects
+        pass`}
+/>
+
+---
+
+## Exercise 5: Human-Robot Interaction Design
+
+Design an improved human-robot interaction system that includes feedback mechanisms and error recovery.
+
+<Exercise
+  id="m4-ex5"
+  type="essay"
+  question="Describe how you would enhance the autonomous humanoid system with better human-robot interaction features. Consider error recovery, feedback mechanisms, and multi-modal communication. Include specific implementation suggestions for each feature."/>

@@ -1,0 +1,223 @@
+# API Contract: Assessment and Progress Tracking
+
+## Base URL
+```
+https://api.physical-ai-textbook.com/v1
+```
+
+## Authentication
+All endpoints require authentication via JWT token in the Authorization header:
+```
+Authorization: Bearer {jwt_token}
+```
+
+## Endpoints
+
+### Assessments
+
+#### Submit Exercise Answer
+```
+POST /assessments/{exerciseId}/submit
+```
+
+**Request Body:**
+```json
+{
+  "answer": "selected_option_A",
+  "studentId": "student_12345",
+  "timestamp": "2025-12-15T10:30:00Z"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "result": {
+    "exerciseId": "ex_123",
+    "isCorrect": true,
+    "feedback": "Correct! The principle of superposition applies here.",
+    "score": 1.0,
+    "completedAt": "2025-12-15T10:31:00Z"
+  }
+}
+```
+
+#### Get Exercise Details
+```
+GET /exercises/{exerciseId}
+```
+
+**Response:**
+```json
+{
+  "id": "ex_123",
+  "type": "multiple_choice",
+  "question": "What is the primary advantage of ROS2 over ROS1?",
+  "options": [
+    "Better real-time support",
+    "Improved security features", 
+    "More programming language options",
+    "All of the above"
+  ],
+  "associatedChapter": "module-1-ros2-fundamentals",
+  "difficulty": "intermediate"
+}
+```
+
+### Progress Tracking
+
+#### Get Student Progress
+```
+GET /students/{studentId}/progress
+```
+
+**Response:**
+```json
+{
+  "studentId": "student_12345",
+  "courses": [
+    {
+      "courseId": "physical-ai-101",
+      "progress": {
+        "completedChapters": ["intro", "module-1-ros2", "module-2-simulation"],
+        "totalChapters": 8,
+        "exercisesCompleted": 24,
+        "totalExercises": 40,
+        "overallScore": 0.78
+      },
+      "lastAccessed": "2025-12-15T09:15:00Z"
+    }
+  ]
+}
+```
+
+#### Update Chapter Progress
+```
+POST /students/{studentId}/chapters/{chapterId}/progress
+```
+
+**Request Body:**
+```json
+{
+  "chapterId": "module-3-isaac",
+  "status": "completed",
+  "timeSpent": 3600,
+  "exercisesCompleted": ["ex_101", "ex_102"],
+  "exerciseScores": {
+    "ex_101": 1.0,
+    "ex_102": 0.8
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "progressRecord": {
+    "studentId": "student_12345",
+    "chapterId": "module-3-isaac",
+    "status": "completed",
+    "timeSpent": 3600,
+    "updatedAt": "2025-12-15T11:00:00Z"
+  }
+}
+```
+
+### LTI Integration
+
+#### LTI Launch Endpoint
+```
+POST /lti/launch
+```
+
+**Request Body:**
+```
+Form data with LTI parameters:
+- lti_version: "LTI-1p0"
+- lti_message_type: "basic-lti-launch-request"
+- lis_outcome_service_url: "https://canvas.institution.edu/api/lti/outcomes"
+- lis_result_sourcedid: "course_123_student_456_assignment_789"
+- resource_link_id: "assignment_789"
+- user_id: "student_456"
+- roles: "Student"
+```
+
+**Response:**
+```html
+<HTML>
+  <HEAD>
+    <TITLE>Physical AI & Humanoid Robotics Textbook</TITLE>
+  </HEAD>
+  <BODY>
+    <IFRAME src="https://textbook.physical-ai-textbook.com/lti/module-1?studentId=student_456" 
+            width="100%" height="800px" frameborder="0" />
+  </BODY>
+</HTML>
+```
+
+### Content Management
+
+#### Get Chapter Content
+```
+GET /chapters/{chapterId}
+```
+
+**Response:**
+```json
+{
+  "id": "module-1-ros2-fundamentals",
+  "title": "ROS2 Fundamentals",
+  "content": "# ROS2 Architecture\n\nROS2 (Robot Operating System 2) provides ...",
+  "learningObjectives": [
+    "Understand ROS2 architecture and core concepts",
+    "Implement ROS2 packages with Python",
+    "Configure launch files and parameters"
+  ],
+  "keyTerms": ["ROS2", "Nodes", "Topics", "Services", "Actions"],
+  "prerequisites": ["basic linear algebra", "Python programming"],
+  "exercises": [
+    {
+      "id": "ex_101",
+      "title": "ROS2 Node Communication",
+      "type": "coding"
+    }
+  ],
+  "references": [
+    {
+      "id": "ref_001",
+      "ieeeCitation": "Shibata, C., Ito, S., Osa, T., & Sugiyama, M. (2021). Overview of Robot Operating System 2 for robotics engineers. Advanced Robotics, 35(1), 1-20."
+    }
+  ]
+}
+```
+
+## Error Responses
+
+All endpoints follow the same error response format:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The request body contains invalid data",
+    "details": [
+      {
+        "field": "answer",
+        "issue": "Answer must be provided"
+      }
+    ]
+  }
+}
+```
+
+## Rate Limiting
+
+All endpoints are rate-limited to 100 requests per minute per authenticated user.
+
+## CORS
+
+All endpoints allow requests from:
+- `https://textbook.physical-ai-textbook.com`
+- `https://[institution].edu` (for LTI integrations)

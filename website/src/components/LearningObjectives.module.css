@@ -1,0 +1,25 @@
+/* website/src/components/LearningObjectives.module.css */
+.objectivesContainer {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-left: 4px solid var(--textbook-accent);
+  background-color: var(--textbook-secondary);
+  border-radius: 0 4px 4px 0;
+}
+
+.objectivesContainer h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--textbook-accent);
+  font-size: 1.1rem;
+}
+
+.objectivesContainer ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.objectivesContainer li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}

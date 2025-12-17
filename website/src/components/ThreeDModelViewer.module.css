@@ -1,0 +1,137 @@
+/* website/src/components/ThreeDModelViewer.module.css */
+.container {
+  border: 1px solid var(--textbook-border);
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+.viewerContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.viewerHeader {
+  background-color: #e9ecef;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--textbook-border);
+}
+
+.viewerHeader h4 {
+  margin: 0;
+  color: #495057;
+}
+
+.viewerContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+}
+
+.viewerPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.modelIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.modelPath {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.viewerControls {
+  padding: 0.75rem;
+  background-color: #e9ecef;
+  border-top: 1px solid var(--textbook-border);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.controlBtn {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #adb5bd;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.controlBtn:hover {
+  background-color: #f8f9fa;
+}
+
+.rotate {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.zoomIn {
+  background-color: #ffeaa7;
+  border-color: #fdcb6e;
+}
+
+.zoomOut {
+  background-color: #ffeaa7;
+  border-color: #fdcb6e;
+}
+
+.reset {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .container {
+  border-color: #495057;
+}
+
+[data-theme='dark'] .viewerHeader {
+  background-color: #343a40;
+  border-color: #495057;
+}
+
+[data-theme='dark'] .viewerHeader h4 {
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .viewerContent {
+  background: linear-gradient(45deg, #212529, #343a40);
+}
+
+[data-theme='dark'] .controlBtn {
+  background-color: #343a40;
+  border-color: #6c757d;
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .controlBtn:hover {
+  background-color: #495057;
+}
+
+[data-theme='dark'] .rotate {
+  background-color: #1a3c4d;
+  border-color: #205a75;
+}
+
+[data-theme='dark'] .zoomIn, [data-theme='dark'] .zoomOut {
+  background-color: #483427;
+  border-color: #6e5c4a;
+}
+
+[data-theme='dark'] .reset {
+  background-color: #1a3c4d;
+  border-color: #205a75;
+}
