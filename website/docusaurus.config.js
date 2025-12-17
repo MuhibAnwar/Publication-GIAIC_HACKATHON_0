@@ -9,10 +9,9 @@ const config = {
   favicon: 'img/favicon.svg',
 
   // Set the production url of your site here
-  url: 'https://your-organization.github.io',
+  url: 'https://physical-ai-textbook.vercel.app',
   // Set the /<base> pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<org-name>/<repo-name>/'
-  baseUrl: '/physical-ai-textbook/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'your-organization', // Usually your GitHub org/user name.
@@ -21,9 +20,12 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
+  // For proper routing on Vercel
+  trailingSlash: false,
+
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es', 'fr'], // Adding multi-language support per requirement
+    locales: ['en'], // Using only English for Vercel deployment to reduce memory usage
   },
 
   presets: [
@@ -42,7 +44,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/your-organization/physical-ai-textbook/tree/main/website/',
+            'https://github.com/MuhibAnwar/Publication-GIAIC_HACKATHON_0/tree/main/website/',
         },
         blog: false, // Disable blog functionality
         theme: {
@@ -71,7 +73,7 @@ const config = {
             label: 'Textbook',
           },
           {
-            href: 'https://github.com/your-organization/physical-ai-textbook',
+            href: 'https://github.com/MuhibAnwar/Publication-GIAIC_HACKATHON_0',
             label: 'GitHub',
             position: 'right',
           },
